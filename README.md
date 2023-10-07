@@ -1,8 +1,14 @@
 # Linux Device Drivers
 
+Notes: Study notes from:
+- LinkedIn Learning [Linux Device Drivers.](https://www.linkedin.com/learning/linux-device-drivers)
+- [Linux Device Driver Development](https://www.amazon.com/Linux-Device-Driver-Development-development/dp/1803240067) book.
+
 ## 1. Linux Kernel Module (LKM)
 
 Linux Kernel Modules enable features such as device drivers, filesystems, and system calls to be dynamically added to or removed from the running kernel. Essentially, they are pieces of code that can be loaded and unloaded into the kernel upon demand. They extend the functionality of the kernel without the need to reboot the system.
+
+A kernel module can be a device driver, in which case it would control and manage a particular hardware device, hence the name device driver. A module can also add a framework support (for example IIO, the Industrial Input Output framework), extend an existing framework, or even a new filesystem or an extension of it. The thing to keep in mind is that kernel modules are not always device drivers, whereas device drivers are always kernel modules.
 
 ### Advantages of LKMs
 
