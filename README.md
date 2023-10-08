@@ -4,11 +4,27 @@ Notes: Study notes from:
 - LinkedIn Learning [Linux Device Drivers.](https://www.linkedin.com/learning/linux-device-drivers)
 - [Linux Device Driver Development](https://www.amazon.com/Linux-Device-Driver-Development-development/dp/1803240067) book.
 
+## Index
+
+- [1. Linux Kernel Module (LKM).](#1-linux-kernel-module-lkm)
+- [2. Hello Module.](#2-hello-module)
+- [3. Character Device Drivers.](#3-character-device-drivers)
+
 ## 1. Linux Kernel Module (LKM)
 
 Linux Kernel Modules enable features such as device drivers, filesystems, and system calls to be dynamically added to or removed from the running kernel. Essentially, they are pieces of code that can be loaded and unloaded into the kernel upon demand. They extend the functionality of the kernel without the need to reboot the system.
 
 A kernel module can be a device driver, in which case it would control and manage a particular hardware device, hence the name device driver. A module can also add a framework support (for example IIO, the Industrial Input Output framework), extend an existing framework, or even a new filesystem or an extension of it. The thing to keep in mind is that kernel modules are not always device drivers, whereas device drivers are always kernel modules.
+
+To support module loading, the kernel must have been built with the following option enabled:
+```text
+CONFIG_MODULES=y
+```
+
+Unloading modules is a kernel feature that can be enabled or disabled according to the `CONFIG_MODULE_UNLOAD` kernel configuration option. Thus, to be able to unload modules, the following feature must be enabled:
+```text
+CONFIG_MODULE_UNLOAD=y
+```
 
 ### Advantages of LKMs
 
@@ -30,7 +46,17 @@ A kernel module can be a device driver, in which case it would control and manag
 - `depmod` : Generate module dependencies for modprobe.
 
 
+The modules are installed in `/lib/modules/$(uname -r)/kernel/`. In addition to the kernel directory that is shipped with modules, the following files are installed in `/lib/modules/<version>` as well:
+
+- `modules.builtin`: This lists all the kernel objects (.ko) that are built into the kernel.
+- `modules.alias`: This contains the aliases for module loading utilities, which are used to match drivers and devices.
+- `modules.dep`: This lists modules, along with their dependencies.
+- `modules.symbols`: This tells us which module a given symbol belongs to.
+
 ## 2. Hello Module
+
+The `static int __init hello_start` method is the entry point and corresponds to the function called when the module is loaded (modprobe or insmod), and the `static void __exit hello_end` is the cleanup and exit
+point and corresponds to the function executed at module unloading (at rmmod or modprobe -r).
 
 ### 2.1 Building and install
 
