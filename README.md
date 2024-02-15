@@ -2,13 +2,14 @@
 
 Notes: Study notes from:
 - LinkedIn Learning [Linux Device Drivers.](https://www.linkedin.com/learning/linux-device-drivers)
+- Udemy [Linux Device Driver Programming Using Beaglebone Black(LDD1).](https://www.udemy.com/course/linux-device-driver-programming-using-beaglebone-black/)
 - [Linux Device Driver Development](https://www.amazon.com/Linux-Device-Driver-Development-development/dp/1803240067) book.
 
 ## Index
 
-- [1. Linux Kernel Module (LKM).](#1-linux-kernel-module-lkm)
-- [2. Hello Module.](#2-hello-module)
-- [3. Character Device Drivers.](#3-character-device-drivers)
+- [1. Linux Kernel Module (LKM).](#2-linux-kernel-module-lkm)
+- [2. Device Drivers for BeagleBone Black.](BeagleBoneBlack/README.md)
+- [3. Hello Module.](#3-hello-module)
 
 ## 1. Linux Kernel Module (LKM)
 
@@ -53,12 +54,16 @@ The modules are installed in `/lib/modules/$(uname -r)/kernel/`. In addition to 
 - `modules.dep`: This lists modules, along with their dependencies.
 - `modules.symbols`: This tells us which module a given symbol belongs to.
 
-## 2. Hello Module
+## 2. Device Drivers for BeagleBone Black
+
+Ver folder [BeagleBoneBlack.](BeagleBoneBlack/)
+
+## 3. Hello Module
 
 The `static int __init hello_start` method is the entry point and corresponds to the function called when the module is loaded (modprobe or insmod), and the `static void __exit hello_end` is the cleanup and exit
 point and corresponds to the function executed at module unloading (at rmmod or modprobe -r).
 
-### 2.1 Building and install
+### 3.1 Building and install
 
 1. Access the folder `hello_module` and run the command `make`.
 
@@ -78,7 +83,7 @@ $ sudo dmesg | tail
 [25924.125954] Hello, World!
 ```
 
-### 2.2 Removing the module
+### 3.2 Removing the module
 
 1. Remove the module by typing
 
@@ -100,7 +105,7 @@ $ sudo dmesg | tail
 
 The module was removed.
 
-### 2.3 Tracing the hello_module
+### 3.3 Tracing the hello_module
  Note: To see more detail about ftrace, access the Linux documentation, link https://www.kernel.org/doc/html/v6.1/trace/ftrace.html
 
 1. Change to root user
