@@ -12,7 +12,8 @@ LABEL maintainer="Charles Dias <charlesdias@tecnofuturo.com.br>"
 # Download Linux support tools
 RUN apt-get update && apt-get -y upgrade && \
     apt-get -y install build-essential lzop u-boot-tools net-tools bison flex libssl-dev libncurses5-dev \
-    libncursesw5-dev unzip chrpath xz-utils minicom wget git-core curl bc kmod vim libgmp-dev libmpc-dev cpio
+    libncursesw5-dev unzip chrpath xz-utils minicom wget git-core curl bc kmod vim libgmp-dev libmpc-dev \
+    cpio file
 
 # Clean up APT when done
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
