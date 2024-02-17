@@ -11,28 +11,30 @@
 #define PCD_DEVICE_NAME     "pcd"
 #define PCD_CLASS           "pcd_class"
 
-/* Pseudo device's memory.*/
+/* Memory size of the pseudo device.*/
 #define DEV_MEM_SIZE        (512)
 char device_buffer[DEV_MEM_SIZE];
 
-/* Hold the device number.*/
+/* Device number holder.*/
 dev_t device_number;
 
-/* Hold the cdev structure.*/
+/* cdev structure holder.*/
 struct cdev pcd_cdev;
 
+/* Function to handle llseek system call for the pseudo device.*/
 loff_t pcd_llseek(struct file *filp, loff_t offset, int whence)
 {
     loff_t temp;
 
     pr_info("Lseek requested with offset = %lld and whence = %d\n", offset, whence);
 
+    /* Handle the different cases of whence and adjust the file position accordingly.*/
     switch (whence)
     {
     case SEEK_SET:
         if (offset > DEV_MEM_SIZE || offset < 0)
         {
-            return -EINVAL;  // Error code for invalid argument
+            return -EINVAL;  // Return error code for invalid argument
         }
         filp->f_pos = offset;
         break;
@@ -40,7 +42,7 @@ loff_t pcd_llseek(struct file *filp, loff_t offset, int whence)
         temp = filp->f_pos + offset;
         if (temp > DEV_MEM_SIZE || temp < 0)
         {
-            return -EINVAL;  // Error code for invalid argument
+            return -EINVAL;  // Return error code for invalid argument
         }
         filp->f_pos = temp;
         break;
@@ -48,12 +50,12 @@ loff_t pcd_llseek(struct file *filp, loff_t offset, int whence)
         temp = DEV_MEM_SIZE + offset;
         if (temp > DEV_MEM_SIZE || temp < 0)
         {
-            return -EINVAL;  // Error code for invalid argument
+            return -EINVAL;  // Return error code for invalid argument
         }
         filp->f_pos = temp;
         break;
     default:
-        return -EINVAL;  // Error code for invalid argument
+        return -EINVAL;  // Return error code for invalid argument
     }
 
     pr_info("New value of f_pos = %lld\n", filp->f_pos);
@@ -62,21 +64,22 @@ loff_t pcd_llseek(struct file *filp, loff_t offset, int whence)
     return filp->f_pos;
 }
 
+/* Function to handle read system call for the pseudo device.*/
 ssize_t pcd_read(struct file *filp, char __user *buff, size_t count, loff_t *f_pos)
 {
     pr_info("Read requested with count = %zu and f_pos = %lld\n", count, *f_pos);
 
-    /* Adjust the count.*/
+    /* Adjust the count if trying to read beyond end of device.*/
     if ((*f_pos + count) > DEV_MEM_SIZE)
     {
         count = DEV_MEM_SIZE - *f_pos;
     }
 
-    /* Copy to user.*/
+    /* Copy data from device_buffer to user buffer.*/
     if (copy_to_user(buff, device_buffer + *f_pos, count))
     {
         pr_err("Failed to copy data to user\n");
-        return -EFAULT;  // Error code for bad address
+        return -EFAULT;  // Return error code for bad address
     }
 
     /* Update the file position.*/
@@ -88,11 +91,12 @@ ssize_t pcd_read(struct file *filp, char __user *buff, size_t count, loff_t *f_p
     return count;
 }
 
+/* Function to handle write system call for the pseudo device.*/
 ssize_t pcd_write(struct file *filp, const char __user *buff, size_t count, loff_t *f_pos)
 {
     pr_info("Write requested with count = %zu and f_pos = %lld\n", count, *f_pos);
 
-    /* Adjust the count.*/
+    /* Adjust the count if trying to write beyond end of device.*/
     if ((*f_pos + count) > DEV_MEM_SIZE)
     {
         count = DEV_MEM_SIZE - *f_pos;
@@ -101,14 +105,14 @@ ssize_t pcd_write(struct file *filp, const char __user *buff, size_t count, loff
     if (!count)
     {
         pr_err("No space left on the device\n");
-        return -ENOMEM;  // Error code for no memory
+        return -ENOMEM;  // Return error code for no memory
     }
 
-    /* Copy from user.*/
+    /* Copy data from user buffer to device_buffer.*/
     if (copy_from_user(device_buffer + *f_pos, buff, count))
     {
         pr_err("Failed to copy data from user\n");
-        return -EFAULT;  // Error code for bad address
+        return -EFAULT;  // Return error code for bad address
     }
 
     /* Update the file position.*/
@@ -120,19 +124,21 @@ ssize_t pcd_write(struct file *filp, const char __user *buff, size_t count, loff
     return count;
 }
 
+/* Function to handle open system call for the pseudo device.*/
 int pcd_open(struct inode *inode, struct file *file)
 {
-    pr_info("Open was successful\n");
+    pr_info("Open operation was successful\n");
     return 0;
 }
 
+/* Function to handle release system call for the pseudo device.*/
 int pcd_release(struct inode *inode, struct file *filp)
 {
-   pr_info("Close was successful\n");
+   pr_info("Close operation was successful\n");
    return 0;
 }
 
-/* File operations of the driver.*/
+/* File operations structure that links the system calls to the functions defined above.*/
 struct file_operations pcd_fops = {
     .open = pcd_open,
     .release = pcd_release,
@@ -142,13 +148,13 @@ struct file_operations pcd_fops = {
     .owner = THIS_MODULE
 };
 
-/* Hold the device class.*/
+/* Device class holder.*/
 struct class *class_pcd;
 
-/* Hold the device structure.*/
+/* Device structure holder.*/
 struct device *device_pcd;
 
-/* This function is called when the device is opened.*/
+/* Function to initialize the driver module.*/
 static int __init pcd_driver_init(void)
 {
     int ret;
@@ -208,6 +214,7 @@ out:
     return ret;
 }
 
+/* Function to clean up resources when the module is removed.*/
 static void __exit pcd_driver_cleanup(void)
 {
     /* 1. Destroy the device.*/
