@@ -1,7 +1,10 @@
 # Linux Device Drivers on BeagleBone Black
 
 - [Host and target setup.](#host-and-target-setup)
-- [Custom drivers.](#custom-drivers)
+- Custom drivers
+  - [Example 001hello_world readme.](custom_drivers/001hello_world/README.md)
+  - [Example 002pseudo_char_driver readme.](custom_drivers/002pseudo_char_driver/README.md)
+  - [Example 003pseudo_char_driver_multiple readme.](custom_drivers/003pseudo_char_driver_multiple/README.md)
 
 ## Host and target setup
 
@@ -166,9 +169,3 @@ uname -r
 root@beaglebone:~# uname -r
 5.10.162
 ```
-
-## Custom drivers
-
--[Example 001hello_world readme.](custom_drivers/001hello_world/README.md)
--[Example 002pseudo_char_driver readme.](custom_drivers/002pseudo_char_driver/README.md)
--[Example 003pseudo_char_driver_multiple readme.](custom_drivers/003pseudo_char_driver_multiple/README.md)
