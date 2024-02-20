@@ -1,4 +1,4 @@
-# Example 001hello_world
+# Example 001_hello_world
 
 **Note.** The kernel and modules must be precompiled. See the section [Linux kernel compilation - Version 5.10.](#linux-kernel-compilation---version-510)
 
@@ -8,7 +8,7 @@
 docker run --rm -it -v ~/.gitconfig:/etc/gitconfig -v $(pwd):/home/ldd charlesdias/device_drivers_bbb:latest
 ```
 
-2. Access the folder `BeagleBoneBlack/custom_drivers/001hello_world`.
+2. Access the folder `BeagleBoneBlack/custom_drivers/001_hello_world`.
 
 3. Run the commands below do generate the main.ko file
 

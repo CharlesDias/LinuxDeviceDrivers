@@ -1,4 +1,4 @@
-# Example 003pseudo_char_driver_multiple
+# Example 003_pseudo_char_driver_multiple
 
 **Note.** The kernel and modules must be precompiled. See the section [Linux kernel compilation - Version 5.10.](#linux-kernel-compilation---version-510)
 
@@ -8,7 +8,7 @@
 docker run --rm -it -v ~/.gitconfig:/etc/gitconfig -v $(pwd):/home/ldd charlesdias/device_drivers_bbb:latest
 ```
 
-2. Access the folder `BeagleBoneBlack/custom_drivers/003pseudo_char_driver_multiple`.
+2. Access the folder `BeagleBoneBlack/custom_drivers/003_pseudo_char_driver_multiple`.
 
 3. Run the commands below do generate the pcd_n.ko file
 
