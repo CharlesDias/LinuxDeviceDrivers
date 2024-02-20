@@ -8,18 +8,10 @@ Notes: Study notes from:
 ## Index
 
 - [1. Device Drivers for BeagleBone Black.](BeagleBoneBlack/README.md)
-- [2. Hello Module.](#2-hello-module)
-- [3. Linux Kernel Module (LKM).](#2-linux-kernel-module-lkm)
+- [2. Hello Module.](hello_module/README.md)
+- [3. Linux Kernel Module (LKM).](#1-linux-kernel-module-lkm)
 
-## 1. Device Drivers for BeagleBone Black
-
-Ver folder **README.md** file inside the [BeagleBoneBlack](BeagleBoneBlack/) folder.
-
-## 2. Hello Module
-
-Ver folder **README.md** file inside the [hello_module](hello_module/) folder.
-
-## 3. Linux Kernel Module (LKM)
+## 1. Linux Kernel Module (LKM)
 
 Linux Kernel Modules enable features such as device drivers, filesystems, and system calls to be dynamically added to or removed from the running kernel. Essentially, they are pieces of code that can be loaded and unloaded into the kernel upon demand. They extend the functionality of the kernel without the need to reboot the system.
 
