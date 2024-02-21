@@ -5,6 +5,7 @@
   - [Example 001_hello_world readme.](custom_drivers/001_hello_world/README.md)
   - [Example 002_pseudo_char_driver readme.](custom_drivers/002_pseudo_char_driver/README.md)
   - [Example 003_pseudo_char_driver_multiple readme.](custom_drivers/003_pseudo_char_driver_multiple/README.md)
+  - [Example 004_pcd_platform_driver readme.](custom_drivers/004_pcd_platform_driver/README.md)
 
 ## Host and target setup
 
