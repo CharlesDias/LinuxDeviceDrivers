@@ -9,9 +9,23 @@ Notes: Study notes from:
 
 - [1. Device Drivers for BeagleBone Black.](BeagleBoneBlack/README.md)
 - [2. Hello Module.](hello_module/README.md)
-- [3. Linux Kernel Module (LKM).](#1-linux-kernel-module-lkm)
+- [3. Linux Kernel Module (LKM).](#linux-kernel-module-lkm)
+- [Best practices for writing efficient and reliable kernel modules](#best-practices-for-writing-efficient-and-reliable-kernel-modules)
+- [Debugging techniques for kernel modules in Linux](#debugging-techniques-for-kernel-modules-in-linux)
+- [Profiling and optimizing the performance of a kernel module in Linux](#profiling-and-optimizing-the-performance-of-a-kernel-module-in-linux)
+- [Handling errors and exceptions in kernel modules](#handling-errors-and-exceptions-in-kernel-modules)
+- [Techniques for optimizing the memory usage of a kernel module in Linux](#techniques-for-optimizing-the-memory-usage-of-a-kernel-module-in-linux)
+- [Concurrency in kernel modules](#concurrency-in-kernel-modules)
+- [Interrupts in kernel modules](#interrupts-in-kernel-modules)
+- [Power management in kernel modules](#power-management-in-kernel-modules)
+- [Handling I/O operations in kernel modules](#handling-io-operations-in-kernel-modules)
+- [Synchronization and locking in kernel modules](#synchronization-and-locking-in-kernel-modules)
+- [Handling memory allocation and deallocation in kernel modules](#handling-memory-allocation-and-deallocation-in-kernel-modules)
+- [Testing frameworks for device drivers](#testing-frameworks-for-device-drivers)
 
-## 1. Linux Kernel Module (LKM)
+Please note that these links will work correctly if the titles are used as anchors in the same Markdown document.
+
+## Linux Kernel Module (LKM)
 
 Linux Kernel Modules enable features such as device drivers, filesystems, and system calls to be dynamically added to or removed from the running kernel. Essentially, they are pieces of code that can be loaded and unloaded into the kernel upon demand. They extend the functionality of the kernel without the need to reboot the system.
 
@@ -273,3 +287,24 @@ Memory management is a crucial aspect of kernel module development. Here are som
 
 Remember, always free any memory you allocate once it's no longer needed to prevent memory leaks. Also, be aware that memory allocation can fail, especially for large allocations, so always check the return value of `kmalloc`, `vmalloc`, and `get_free_pages`.
 
+## Testing frameworks for device drivers
+
+### Linux Test Project (LTP)
+
+LTP is a project that aims to deliver test suites to the open source community that validate the reliability, robustness, and stability of Linux. It includes a set of tools for testing different aspects of the kernel such as system calls, networking, and filesystems. For device driver testing, you can use LTP's device driver framework (DDT).
+
+### KUnit
+
+KUnit is a lightweight unit testing and mocking framework for the Linux kernel. Unlike other unit testing frameworks, KUnit is a part of the Linux kernel itself. This makes it capable of testing any part of the kernel, including device drivers.
+
+### Kernel Test Robot
+
+Kernel Test Robot is an automated testing system that can build and boot kernels, and run tests on them. It's particularly useful for regression testing and can help catch issues early in the development cycle.
+
+### Autotest
+
+Autotest is a framework for automated testing and includes a number of tests specifically for the kernel. It's designed to be portable and extensible, making it a good choice for complex testing scenarios.
+
+### Trinity
+
+Trinity is a system call fuzz tester which generates random system calls. It's particularly useful for stress testing and finding obscure bugs in device drivers.
