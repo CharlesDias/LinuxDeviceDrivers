@@ -6,6 +6,7 @@
 #include <linux/uaccess.h>
 #include <linux/platform_device.h>
 #include <linux/slab.h>
+#include<linux/mod_devicetable.h>
 
 #include "platform.h"
 
@@ -14,21 +15,31 @@
 
 #define MAX_DEVICES 10
 
-#define PCD_DEVICE_NAME "pcd"
 #define PCD_CLASS "pcd_class"
 
-#define NO_OF_DEVICES 4
+/* Enumeration of device names */
+enum pcdev_names
+{
+    PCDEVA1X,
+    PCDEVB1X,
+    PCDEVC1X,
+    PCDEVD1X
+};
 
-#define MEM_SIZE_MAX_PCDEV1 1024
-#define MEM_SIZE_MAX_PCDEV2 512
-#define MEM_SIZE_MAX_PCDEV3 1024
-#define MEM_SIZE_MAX_PCDEV4 512
+struct device_config 
+{
+    int config_item1;
+    int config_item2;
+};
 
-/* Memory size of the pseudo device.*/
-char device_buffer_pcdev1[MEM_SIZE_MAX_PCDEV1];
-char device_buffer_pcdev2[MEM_SIZE_MAX_PCDEV2];
-char device_buffer_pcdev3[MEM_SIZE_MAX_PCDEV3];
-char device_buffer_pcdev4[MEM_SIZE_MAX_PCDEV4];
+/* Configuration data of the driver for devices */
+struct device_config pcdev_config[] = 
+{
+    [PCDEVA1X] = {.config_item1 = 60, .config_item2 = 21},
+    [PCDEVB1X] = {.config_item1 = 50, .config_item2 = 22},
+    [PCDEVC1X] = {.config_item1 = 40, .config_item2 = 23},
+    [PCDEVD1X] = {.config_item1 = 30, .config_item2 = 24}
+};
 
 /*Device private data structure */
 struct pcdev_private_data
@@ -50,120 +61,6 @@ struct pcdrv_private_data
 
 /* Driver's private data */
 struct pcdrv_private_data pcdrv_data;
-
-/* Function to handle llseek system call for the pseudo device.*/
-loff_t pcd_llseek(struct file *filp, loff_t offset, int whence)
-{
-    // loff_t temp;
-    // struct pcdev_private_data *pcdev_data = (struct pcdev_private_data *)filp->private_data;
-    // int max_size = pcdev_data->size;
-
-    // pr_info("Lseek requested with offset = %lld and whence = %d\n", offset, whence);
-
-    // /* Handle the different cases of whence and adjust the file position accordingly.*/
-    // switch (whence)
-    // {
-    // case SEEK_SET:
-    //     if (offset > max_size || offset < 0)
-    //     {
-    //         return -EINVAL;  // Return error code for invalid argument
-    //     }
-    //     filp->f_pos = offset;
-    //     break;
-    // case SEEK_CUR:
-    //     temp = filp->f_pos + offset;
-    //     if (temp > max_size || temp < 0)
-    //     {
-    //         return -EINVAL;  // Return error code for invalid argument
-    //     }
-    //     filp->f_pos = temp;
-    //     break;
-    // case SEEK_END:
-    //     temp = max_size + offset;
-    //     if (temp > max_size || temp < 0)
-    //     {
-    //         return -EINVAL;  // Return error code for invalid argument
-    //     }
-    //     filp->f_pos = temp;
-    //     break;
-    // default:
-    //     return -EINVAL;  // Return error code for invalid argument
-    // }
-
-    // pr_info("New value of f_pos = %lld\n", filp->f_pos);
-
-    // /* Return updated file position value. */
-    // return filp->f_pos;
-    return 0;
-}
-
-/* Function to handle read system call for the pseudo device.*/
-ssize_t pcd_read(struct file *filp, char __user *buff, size_t count, loff_t *f_pos)
-{
-    // struct pcdev_private_data *pcdev_data = (struct pcdev_private_data *)filp->private_data;
-    // int max_size = pcdev_data->size;
-
-    // pr_info("Read requested with count = %zu and f_pos = %lld\n", count, *f_pos);
-
-    // /* Adjust the count if trying to read beyond end of device.*/
-    // if ((*f_pos + count) > max_size)
-    // {
-    //     count = max_size - *f_pos;
-    // }
-
-    // /* Copy data from device_buffer to user buffer.*/
-    // if (copy_to_user(buff, pcdev_data->buffer + *f_pos, count))
-    // {
-    //     pr_err("Failed to copy data to user\n");
-    //     return -EFAULT;  // Return error code for bad address
-    // }
-
-    // /* Update the file position.*/
-    // *f_pos += count;
-
-    // pr_info("Number of bytes successfully read = %zu and updated f_pos = %lld\n", count, *f_pos);
-
-    // /* Return number of bytes which have been successfully read. */
-    // return count;
-    return 0;
-}
-
-/* Function to handle write system call for the pseudo device.*/
-ssize_t pcd_write(struct file *filp, const char __user *buff, size_t count, loff_t *f_pos)
-{
-    // struct pcdev_private_data *pcdev_data = (struct pcdev_private_data *)filp->private_data;
-    // int max_size = pcdev_data->size;
-
-    // pr_info("Write requested with count = %zu and f_pos = %lld\n", count, *f_pos);
-
-    // /* Adjust the count if trying to write beyond end of device.*/
-    // if ((*f_pos + count) > max_size)
-    // {
-    //     count = max_size - *f_pos;
-    // }
-
-    // if (!count)
-    // {
-    //     pr_err("No space left on the device\n");
-    //     return -ENOMEM;  // Return error code for no memory
-    // }
-
-    // /* Copy data from user buffer to device_buffer.*/
-    // if (copy_from_user(pcdev_data->buffer + *f_pos, buff, count))
-    // {
-    //     pr_err("Failed to copy data from user\n");
-    //     return -EFAULT;  // Return error code for bad address
-    // }
-
-    // /* Update the file position.*/
-    // *f_pos += count;
-
-    // pr_info("Number of bytes successfully written = %zu and updated f_pos = %lld\n", count, *f_pos);
-
-    // /* Return number of bytes which have been successfully written. */
-    // return count;
-    return -ENOMEM;
-}
 
 int check_permission(int dev_perm, int acc_mode)
 {
@@ -188,29 +85,140 @@ int check_permission(int dev_perm, int acc_mode)
     return -EPERM;
 }
 
+/* Function to handle llseek system call for the pseudo device.*/
+loff_t pcd_llseek(struct file *filp, loff_t offset, int whence)
+{
+    loff_t temp;
+    struct pcdev_private_data *pcdev_data = (struct pcdev_private_data *)filp->private_data;
+    int max_size = pcdev_data->pdata.size;
+
+    pr_info("Lseek requested with offset = %lld and whence = %d\n", offset, whence);
+
+    /* Handle the different cases of whence and adjust the file position accordingly.*/
+    switch (whence)
+    {
+    case SEEK_SET:
+        if (offset > max_size || offset < 0)
+        {
+            return -EINVAL;  // Return error code for invalid argument
+        }
+        filp->f_pos = offset;
+        break;
+    case SEEK_CUR:
+        temp = filp->f_pos + offset;
+        if (temp > max_size || temp < 0)
+        {
+            return -EINVAL;  // Return error code for invalid argument
+        }
+        filp->f_pos = temp;
+        break;
+    case SEEK_END:
+        temp = max_size + offset;
+        if (temp > max_size || temp < 0)
+        {
+            return -EINVAL;  // Return error code for invalid argument
+        }
+        filp->f_pos = temp;
+        break;
+    default:
+        return -EINVAL;  // Return error code for invalid argument
+    }
+
+    pr_info("New value of f_pos = %lld\n", filp->f_pos);
+
+    /* Return updated file position value. */
+    return filp->f_pos;
+}
+
+/* Function to handle read system call for the pseudo device.*/
+ssize_t pcd_read(struct file *filp, char __user *buff, size_t count, loff_t *f_pos)
+{
+    struct pcdev_private_data *pcdev_data = (struct pcdev_private_data *)filp->private_data;
+    int max_size = pcdev_data->pdata.size;
+
+    pr_info("Read requested with count = %zu and f_pos = %lld\n", count, *f_pos);
+
+    /* Adjust the count if trying to read beyond end of device.*/
+    if ((*f_pos + count) > max_size)
+    {
+        count = max_size - *f_pos;
+    }
+
+    /* Copy data from device_buffer to user buffer.*/
+    if (copy_to_user(buff, pcdev_data->buffer + *f_pos, count))
+    {
+        pr_err("Failed to copy data to user\n");
+        return -EFAULT;  // Return error code for bad address
+    }
+
+    /* Update the file position.*/
+    *f_pos += count;
+
+    pr_info("Number of bytes successfully read = %zu and updated f_pos = %lld\n", count, *f_pos);
+
+    /* Return number of bytes which have been successfully read. */
+    return count;
+}
+
+/* Function to handle write system call for the pseudo device.*/
+ssize_t pcd_write(struct file *filp, const char __user *buff, size_t count, loff_t *f_pos)
+{
+    struct pcdev_private_data *pcdev_data = (struct pcdev_private_data *)filp->private_data;
+    int max_size = pcdev_data->pdata.size;
+
+    pr_info("Write requested with count = %zu and f_pos = %lld\n", count, *f_pos);
+
+    /* Adjust the count if trying to write beyond end of device.*/
+    if ((*f_pos + count) > max_size)
+    {
+        count = max_size - *f_pos;
+    }
+
+    if (!count)
+    {
+        pr_err("No space left on the device\n");
+        return -ENOMEM;  // Return error code for no memory
+    }
+
+    /* Copy data from user buffer to device_buffer.*/
+    if (copy_from_user(pcdev_data->buffer + *f_pos, buff, count))
+    {
+        pr_err("Failed to copy data from user\n");
+        return -EFAULT;  // Return error code for bad address
+    }
+
+    /* Update the file position.*/
+    *f_pos += count;
+
+    pr_info("Number of bytes successfully written = %zu and updated f_pos = %lld\n", count, *f_pos);
+
+    /* Return number of bytes which have been successfully written. */
+    return count;
+}
+
 /* Function to handle open system call for the pseudo device.*/
 int pcd_open(struct inode *inode, struct file *filp)
 {
-    // int ret;
-    // int minor_n;
-    // struct pcdev_private_data *pcdev_data;
+    int ret;
+    int minor_n;
+    struct pcdev_private_data *pcdev_data;
 
-    // /* Get the minor number of the device which is being opened.*/
-    // minor_n = MINOR(inode->i_rdev);
-    // pr_info("Open operation requested for minor number %d\n", minor_n);
+    /* Get the minor number of the device which is being opened.*/
+    minor_n = MINOR(inode->i_rdev);
+    pr_info("Open operation requested for minor number %d\n", minor_n);
 
-    // /* Get the device's private data structure.*/
-    // pcdev_data = container_of(inode->i_cdev, struct pcdev_private_data, cdev);
+    /* Get the device's private data structure.*/
+    pcdev_data = container_of(inode->i_cdev, struct pcdev_private_data, cdev);
 
-    // /* Save the device's private data structure in the file's private_data.*/
-    // filp->private_data = pcdev_data;
+    /* Save the device's private data structure in the file's private_data.*/
+    filp->private_data = pcdev_data;
 
-    // /* Check if device is open for read or write or both.*/
-    // ret = check_permission(pcdev_data->perm, filp->f_mode);
+    /* Check if device is open for read or write or both.*/
+    ret = check_permission(pcdev_data->pdata.perm, filp->f_mode);
 
-    // (!ret) ? pr_info("Open operation was successful\n") : pr_err("Open operation was unsuccessful\n");
+    (!ret) ? pr_info("Open operation was successful\n") : pr_err("Open operation was unsuccessful\n");
 
-    return 0;
+    return ret;
 }
 
 
@@ -284,8 +292,8 @@ int pcd_platform_driver_probe(struct platform_device *pdev)
     pr_info("Device size = %d\n", dev_data->pdata.size);
     pr_info("Device permission = %d\n",dev_data->pdata.perm);
 
-    // pr_info("Config item 1 = %d\n",pcdev_config[pdev->id_entry->driver_data].config_item1 );
-    // pr_info("Config item 2 = %d\n",pcdev_config[pdev->id_entry->driver_data].config_item2 );
+    pr_info("Config item 1 = %d\n",pcdev_config[pdev->id_entry->driver_data].config_item1 );
+    pr_info("Config item 2 = %d\n",pcdev_config[pdev->id_entry->driver_data].config_item2 );
 
     /* 4. Dynamically allocate memory for the device buffer using size information from the platform data.*/
     dev_data->buffer = devm_kzalloc(&pdev->dev, dev_data->pdata.size, GFP_KERNEL);
@@ -323,11 +331,21 @@ int pcd_platform_driver_probe(struct platform_device *pdev)
     return 0;
 }
 
+struct platform_device_id pcdevs_ids[] = {
+    [0] = {.name = "pcdev-A1x", .driver_data = PCDEVA1X},
+    [1] = {.name = "pcdev-B1x", .driver_data = PCDEVB1X},
+    [2] = {.name = "pcdev-C1x", .driver_data = PCDEVC1X},
+    [3] = {.name = "pcdev-D1x", .driver_data = PCDEVD1X},
+    { } /*Null termination */
+};
+
 struct platform_driver pcd_platform_driver = {
     .probe = pcd_platform_driver_probe,
     .remove = pcd_platform_driver_remove,
+    .id_table = pcdevs_ids, /* Used to match the device id with the driver */
     .driver = {
-        .name = "pseudo-char-device"}};
+        .name = "pseudo-char-device"}
+    };
 
 /* Function to initialize the driver module.*/
 static int __init pcd_platform_driver_init(void)
@@ -343,7 +361,7 @@ static int __init pcd_platform_driver_init(void)
     }
 
     /* 2. Create a device class under /sys/class */
-    pcdrv_data.class_pcd = class_create(THIS_MODULE, "pcd_class");
+    pcdrv_data.class_pcd = class_create(THIS_MODULE, PCD_CLASS);
     if (IS_ERR(pcdrv_data.class_pcd))
     {
         pr_err("Class creation failed\n");
