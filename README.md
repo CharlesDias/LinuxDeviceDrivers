@@ -7,9 +7,9 @@ Notes: Study notes from:
 
 ## Index
 
-- [1. Device Drivers for BeagleBone Black.](BeagleBoneBlack/README.md)
-- [2. Hello Module.](hello_module/README.md)
-- [3. Linux Kernel Module (LKM).](#linux-kernel-module-lkm)
+- [Device Drivers for BeagleBone Black.](BeagleBoneBlack/README.md)
+- [Hello Module.](hello_module/README.md)
+- [Linux Kernel Module (LKM).](#linux-kernel-module-lkm)
 - [Best practices for writing efficient and reliable kernel modules](#best-practices-for-writing-efficient-and-reliable-kernel-modules)
 - [Debugging techniques for kernel modules in Linux](#debugging-techniques-for-kernel-modules-in-linux)
 - [Profiling and optimizing the performance of a kernel module in Linux](#profiling-and-optimizing-the-performance-of-a-kernel-module-in-linux)
